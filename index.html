@@ -33,7 +33,7 @@
 
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 </head>
 
 
@@ -91,9 +91,9 @@
                             url: 'data.php',
                             success: function (data) {
 
-                                 myData = JSON.parse(data);
+                                myData = JSON.parse(data);
                                 //myData.push();
-                                myData.unshift({website:"erwin",shopName:"Shop",productName:"Productname"});
+                                myData.unshift({website:"Website name",shopName:"Shop",productName:"Productname"});
                                 hot.loadData(myData);
                             }
                         });
@@ -146,7 +146,7 @@
 
                             if (col == 2 && row >= 1) {
                                 // add class "negative"
-                                ajax('http://localhost:3000/api/check_content/cupones/'+value, 'GET',null,  function (res) {
+                                ajax('http://localhost:3000/api/check_content/cupones', 'POST','content_hash='+value,  function (res) {
                                     if(res.responseText=="0") {
                                         td.style.fontWeight = 'normal';
                                         td.style.color = 'white';
@@ -208,7 +208,7 @@
                                 var newValue = change[0][3];
                                 var rowIndex = change[0][0];
                                 var columnIndex = change[0][1];
-                                ajax('http://localhost:3000/api/updatecode', 'POST', "oldValue="+oldValue+"&newValue="+newValue+"&shopName="+shopName, function (res) {
+                                ajax('http://localhost:3000/api/updatecode', 'POST', "newValue="+newValue+"&shopName=cupones&oldValue="+oldValue, function (res) {
 
                                 });
 
