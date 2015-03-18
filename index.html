@@ -88,7 +88,6 @@
                         $.ajax({
                             context: document.body,
                             type: 'POST',
-                            data: 'active_veiling_id=',
                             url: 'data.php',
                             success: function (data) {
 
@@ -115,6 +114,8 @@
                         function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
                             Handsontable.renderers.TextRenderer.apply(this, arguments);
                             // if row contains negative number
+
+
                             if(col == 2) {
                                 td.style.fontWeight = 'normal';
                                 td.style.color = 'black';
@@ -143,7 +144,7 @@
 
 
 
-                            if (col == 2 && row >=1 && loaded == false) {
+                            if (col == 2 && row >= 1) {
                                 // add class "negative"
                                 ajax('http://localhost:3000/api/check_content/cupones/'+value, 'GET',null,  function (res) {
                                     if(res.responseText=="0") {
@@ -201,11 +202,12 @@
                                     return; //don't save this change
                                 }
 
+
                                 clearTimeout(autosaveNotification);
                                 var oldValue = change[0][2];
                                 var newValue = change[0][3];
                                 var rowIndex = change[0][0];
-
+                                var columnIndex = change[0][1];
                                 ajax('http://localhost:3000/api/updatecode', 'POST', "oldValue="+oldValue+"&newValue="+newValue+"&shopName="+shopName, function (res) {
 
                                 });
