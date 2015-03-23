@@ -12,11 +12,11 @@
     -->
     <script data-jsfiddle="common" src="dist/handsontable.full.js"></script>
     <link data-jsfiddle="common" rel="stylesheet" media="screen" href="dist/handsontable.full.css">
-    <link rel="stylesheet" media="screen" href="css/samples.css?20140331">
+
     <script  data-jsfiddle="common" src="js/samples.js"></script>
     <script src="js/highlight/highlight.pack.js"></script>
     <link rel="stylesheet" media="screen" href="js/highlight/styles/github.css">
-    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
 
 
     <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -26,10 +26,18 @@
 
 </head>
 <div align="left">
+    <?php $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);?>
 <img src="http://www.tradetrackerbelgiumblog.be/wp-content/uploads/2013/06/logo-imbull.jpg" height="50">
-    <p>You are now editing <span style="color:red; font-weight: bold;">Cupones</span></p>
-    <a href="http://localhost:3000/api/getdata/cupones/json" target="_blank">Export JSON</a> | <a href="http://localhost:3000/api/getdata/cupones/csv">Export CSV</a> |
-    <a href="http://localhost:3000/api/getdata/cupones/json" title="dont do that to often" target="_blank" style="color:red; font-weight: bold;">SCRAPE WEBSITE NOW!</a>
+    <p>You are now editing <span style="color:red; font-weight: bold;">Cupones</span>
+        <span style="font-size:12px; ">
+
+               <a style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=-1"> <?php echo (($updated == -1) ? '<B style="color:black;"> (all content) </B>' : '(all content)');?></a>  /
+                <a  style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=0"> <?php echo (($updated == 0) ? '<B style="color:black;"> (unedited content) </B>' : '(unedited content)');?></a> /
+                <a  style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=1">  <?php echo (($updated == 1) ? '<B style="color:black;"> (edited content) </B>' : '(edited content)');?> </a>
+
+        </span> </p>
+    <a href="http://localhost:3000/api/getdata/cupones/json/<?php echo $updated;?>" target="_blank">Export JSON</a> | <a href="http://localhost:3000/api/getdata/cupones/csv/<?php echo $updated;?>">Export CSV</a> |
+    <a href="http://localhost:3000/api/getdata/cupones/json<?php echo $_GET['updated'];?>" title="dont do that to often" target="_blank" style="color:red; font-weight: bold;">SCRAPE WEBSITE NOW!</a>
     <BR><BR>
 </div>
 
@@ -42,19 +50,40 @@
 
                     <script>
 
+                        var QueryString = function () {
+                            // This function is anonymous, is executed immediately and
+                            // the return value is assigned to QueryString!
+                            var query_string = {};
+                            var query = window.location.search.substring(1);
+                            var vars = query.split("&");
+                            for (var i=0;i<vars.length;i++) {
+                                var pair = vars[i].split("=");
+                                // If first entry with this name
+                                if (typeof query_string[pair[0]] === "undefined") {
+                                    query_string[pair[0]] = pair[1];
+                                    // If second entry with this name
+                                } else if (typeof query_string[pair[0]] === "string") {
+                                    var arr = [ query_string[pair[0]], pair[1] ];
+                                    query_string[pair[0]] = arr;
+                                    // If third or later entry with this name
+                                } else {
+                                    query_string[pair[0]].push(pair[1]);
+                                }
+                            }
+                            return query_string;
+                        } ();
+
+
+
                         shopName = "cupones";
                         loaded = false;
 
                         $.ajax({
                             context: document.body,
-                            type: 'POST',
-                            url: 'data.php',
+                            type: 'GET',
+                            url: 'http://localhost:3000/api/getcontent/cupones/'+QueryString.updated,
                             success: function (data) {
-
-                                myData = JSON.parse(data);
-                                //myData.push();
-                                myData.unshift();
-                                hot.loadData(myData);
+                                hot.loadData(data);
                             }
                         });
 

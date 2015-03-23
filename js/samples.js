@@ -396,7 +396,7 @@ function ajax(url, method, params, callback) {
       bindMenuEvents(menu)
     }
     else {
-      ajax("../index.html", 'GET', '', onMenuLoad);
+      ajax("../index.php", 'GET', '', onMenuLoad);
     }
 
   }
