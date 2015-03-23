@@ -27,7 +27,7 @@
 </head>
 <div align="left">
     <?php $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);?>
-<img src="http://www.tradetrackerbelgiumblog.be/wp-content/uploads/2013/06/logo-imbull.jpg" height="50">
+    <p> <a href="/?shopName=cupones">Cupones</a> | <a href="/?shopName=Cuponation">Cuponation</a> </p>
     <p>You are now editing <span style="color:red; font-weight: bold;">Cupones</span>
         <span style="font-size:12px; ">
 
@@ -37,8 +37,9 @@
 
         </span> </p>
     <a href="http://localhost:3000/api/getdata/cupones/json/<?php echo $updated;?>" target="_blank">Export JSON</a> | <a href="http://localhost:3000/api/getdata/cupones/csv/<?php echo $updated;?>">Export CSV</a> |
-    <a href="http://localhost:3000/api/getdata/cupones/json<?php echo $_GET['updated'];?>" title="dont do that to often" target="_blank" style="color:red; font-weight: bold;">SCRAPE WEBSITE NOW!</a>
+    <a href="javascript:spiderWebsite();" title="dont do that to often"  style="color:red; font-weight: bold;">SCRAPE WEBSITE NOW!</a>
     <BR><BR>
+    <div class="loading" style="font-weight: bold; color:green;"> </div>
 </div>
 
 <div class="wrapper">
@@ -49,6 +50,19 @@
         <div id="example1" ></div>
 
                     <script>
+
+                        function spiderWebsite()
+                        {
+                            $.ajax({
+                                context: document.body,
+                                type: 'GET',
+                                url: 'http://localhost:3000/api/run_spider/'+shopName,
+
+                                    success: function (data) {
+                                        $(".loading").after("Job will be run! Please check back in 1 minute for the updated actions");
+                                    }
+                            });
+                        }
 
                         var QueryString = function () {
                             // This function is anonymous, is executed immediately and
@@ -88,15 +102,16 @@
                         });
 
 
+
+
+
                         var
-                                $ = function(id) {
-                                    return document.getElementById(id);
-                                },
-                                container = $('example1'),
-                                exampleConsole = $('example1console'),
-                                autosave = $('autosave'),
-                                load = $('load'),
-                                save = $('save'),
+
+                                container = document.getElementById('example1'),
+                                exampleConsole = document.getElementById('example1console'),
+                                autosave = document.getElementById('autosave'),
+                                load = document.getElementById('load'),
+                                save = document.getElementById('save'),
                                 autosaveNotification,
                                 hot;
 
@@ -114,7 +129,7 @@
 
 
 
-                            if(col == 1 ) {
+                            if(col == 1  || col ==0) {
                                 cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
                             }
 
@@ -153,9 +168,8 @@
                             colHeaders: true,
                             minSpareRows: 0,
                             contextMenu: false,
-
-                            colWidths: [200, 200, 800, 0],
-                            colHeaders: ["Competitor", "Shopname", "Description"],
+                            colWidths: [200, 200, 800, 120],
+                            colHeaders: ["Competitor", "Shopname", "Description","Expiredate"],
                             columnSorting: {
                                 column: 1
                             },
@@ -191,9 +205,17 @@
                                 var newValue = change[0][3];
                                 var rowIndex = change[0][0];
                                 var columnIndex = change[0][1];
-                                ajax('http://localhost:3000/api/updatecode', 'POST', "newValue="+newValue+"&shopName=cupones&oldValue="+oldValue, function (res) {
+                                if(columnIndex == "endDate") {
+                                    ajax('http://localhost:3000/api/updatecode', 'POST', "newValue="+newValue+"&shopName=cupones&oldValue="+hot.getDataAtCell(rowIndex,2)+"&dateChange=1", function (res) {
 
-                                });
+                                    });
+                                } else {
+                                    ajax('http://localhost:3000/api/updatecode', 'POST', "newValue="+newValue+"&shopName=cupones&oldValue="+oldValue, function (res) {
+
+                                    });
+                                }
+
+
 
                             }
                         });
