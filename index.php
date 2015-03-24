@@ -147,7 +147,7 @@
 
 
                 if(col == 1  || col ==0) {
-                    //cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+                    cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
                 }
                 if (col == 2) {
                     // add class "negative"
