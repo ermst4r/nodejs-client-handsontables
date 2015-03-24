@@ -1,5 +1,4 @@
 <!doctype html>
-<html>
 <head>
     <meta charset='utf-8'>
     <title>Imbull.com - Content editor V0.01</title>
@@ -103,8 +102,10 @@
                 shopName = QueryString.website;
             }
             if(typeof QueryString.deleted  === 'undefined') {
+                contextMenuString = "Delete this row";
                 deleted = 0;
             } else {
+                contextMenuString = "Redo this row";
                 deleted=1;
             }
 
@@ -122,7 +123,6 @@
 
 
             var
-
                 container = document.getElementById('example1'),
                 exampleConsole = document.getElementById('example1console'),
                 autosave = document.getElementById('autosave'),
@@ -168,16 +168,7 @@
 
             }
 
-
-            var emailValidator = function (value, callback) {
-
-
-
-
-            };
-
             Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
-
             hot = new Handsontable(container, {
                 startRows: 1,
                 startCols: 1,
@@ -186,13 +177,13 @@
                 minSpareRows: 0,
                 contextMenu: {
                     callback: function (key, options) {
-                        ajax('http://localhost:3000/api/delete_code', 'POST', "oldValue="+this.getDataAtCell(options.end.row,2)+"&shopName="+shopName, function (res) {
+                        ajax('http://localhost:3000/api/delete_code', 'POST', "delete="+deleted+"&oldValue="+this.getDataAtCell(options.end.row,2)+"&shopName="+shopName, function (res) {
 
                         });
                         this.alter('remove_row',options.end.row);
                     },
                     items: {
-                        "about": {name: 'Delete this row'}
+                        "about": {name: contextMenuString}
                     }
                 },
                 colWidths: [200, 200, 800, 120],
