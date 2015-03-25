@@ -26,7 +26,10 @@
         <span style="color:red;"> <B> Error Occurd! </B> </span><BR><BR>
         <div id="msg" style="font-size:15px;"> </div>
     </div>
-    <?php $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);?>
+    <?php
+    $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);
+    $deleted = (isset($_GET['deleted']) ? $_GET['deleted'] : -0);
+    ?>
     <p> <a href="/?website=cupones&updated=<?php echo $updated;?>">Cupones</a> | <a href="/?website=Cuponation">Cuponation</a> </p>
     <p>You are now editing <span style="color:red; font-weight: bold;">Cupones</span>
         <span style="font-size:12px; ">
@@ -37,8 +40,10 @@
                 <a  style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=-1&website=<?php echo $_GET['website'];?>&deleted=1" title="Show trascan">   <img src="images/trash.gif"> </a>
 
         </span> </p>
-    <a href="http://localhost:3000/api/getdata/cupones/json/<?php echo $updated;?>" target="_blank">Export JSON</a> | <a href="http://localhost:3000/api/getdata/cupones/csv/<?php echo $updated;?>">Export CSV</a> |
-    <a href="javascript:spiderWebsite();" title="dont do that to often"  style="color:red; font-weight: bold;">SCRAPE WEBSITE NOW!</a>
+    <a href="http://localhost:3000/api/getdata/cupones/json/<?php echo $updated;?>/<?php echo $deleted;?>" target="_blank"><img src="images/json_icon.png" title="Export JSON File" ></a> |
+    <a href="http://localhost:3000/api/getdata/cupones/csv/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/csv_icon.png" title="Export Csv File" ></a> |
+    <a href="http://localhost:3000/api/getdata/cupones/xls/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/excel_icon.png" title="Export Excel File" ></a> |
+    <a href="javascript:spiderWebsite();" title="dont do that to often"  style="color:red; font-weight: bold;"><img src="images/play.png" title="Run Scraper Now!" ></a>
     <BR><BR>
     <div class="loading" style="font-weight: bold; color:green;"> </div>
 </div>
