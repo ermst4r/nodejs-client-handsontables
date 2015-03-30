@@ -16,7 +16,7 @@
     <script src="js/highlight/highlight.pack.js"></script>
     <link rel="stylesheet" media="screen" href="js/highlight/styles/github.css">
     <script src="js/jquery.js"></script>
-
+    <script src="js/md5.js"></script>
 
 
 </head>
@@ -30,8 +30,8 @@
     $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);
     $deleted = (isset($_GET['deleted']) ? $_GET['deleted'] : -0);
     ?>
-    <p> <a href="/?website=cupones&updated=<?php echo $updated;?>">Cupones</a> | <a href="/?website=Cuponation">Cuponation</a> </p>
-    <p>You are now editing <span style="color:red; font-weight: bold;">Cupones</span>
+    <p> <a href="?website=cupones&updated=<?php echo $updated;?>">Cupones</a> | <a href="?website=cuponation&updated=<?php echo $updated;?>">Cuponation</a> </p>
+    <p>You are now editing <span style="color:red; font-weight: bold;"><?php echo ucfirst($_GET['website']);?></span>
         <span style="font-size:12px; ">
 
                <a style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=-1&website=<?php echo $_GET['website'];?>"> <?php echo (($updated == -1) ? '<B style="color:black;"> (all content) </B>' : '(all content)');?></a>  /
@@ -40,9 +40,9 @@
                 <a  style="color:black;" href="http://sandbox.ermst4r.nl/contentscraper/?updated=-1&website=<?php echo $_GET['website'];?>&deleted=1" title="Show trascan">   <img src="images/trash.gif"> </a>
 
         </span> </p>
-    <a href="http://localhost:3000/api/getdata/cupones/json/<?php echo $updated;?>/<?php echo $deleted;?>" target="_blank"><img src="images/json_icon.png" title="Export JSON File" ></a> |
-    <a href="http://localhost:3000/api/getdata/cupones/csv/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/csv_icon.png" title="Export Csv File" ></a> |
-    <a href="http://localhost:3000/api/getdata/cupones/xls/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/excel_icon.png" title="Export Excel File" ></a> |
+    <a href="http://localhost:3000/api/getdata/<?php echo $_GET['website'];?>/json/<?php echo $updated;?>/<?php echo $deleted;?>" target="_blank"><img src="images/json_icon.png" title="Export JSON File" ></a> |
+    <a href="http://localhost:3000/api/getdata/<?php echo $_GET['website'];?>/csv/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/csv_icon.png" title="Export Csv File" ></a> |
+    <a href="http://localhost:3000/api/getdata/<?php echo $_GET['website'];?>/xls/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/excel_icon.png" title="Export Excel File" ></a> |
     <a href="javascript:spiderWebsite();" title="dont do that to often"  style="color:red; font-weight: bold;"><img src="images/play.png" title="Run Scraper Now!" ></a>
     <BR><BR>
     <div class="loading" style="font-weight: bold; color:green;"> </div>
@@ -117,7 +117,7 @@
             $.ajax({
                 context: document.body,
                 type: 'GET',
-                url: 'http://localhost:3000/api/getcontent/cupones/'+updated+'/'+deleted,
+                url: 'http://localhost:3000/api/getcontent/'+shopName+'/'+updated+'/'+deleted,
                 success: function (data) {
                     hot.loadData(data);
                 }
@@ -149,15 +149,14 @@
                 }
 
 
-
-
                 if(col == 1  || col ==0) {
                     cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
                 }
                 if (col == 2) {
                     // add class "negative"
-                    ajax('http://localhost:3000/api/check_content/'+shopName, 'POST','content_hash='+value,  function (res) {
+                    ajax('http://localhost:3000/api/check_content/'+shopName, 'POST','content_hash='+encodeURIComponent(value),  function (res) {
                         if(res.responseText=="0") {
+                            console.log(value);
                             td.style.fontWeight = 'normal';
                             td.style.color = 'black';
                             td.style.background = '#bfecc7';
@@ -229,8 +228,8 @@
                     if (source === 'loadData') {
                         return; //don't save this change
                     }
-                    var oldValue = change[0][2];
-                    var newValue = change[0][3];
+                    var oldValue = encodeURIComponent(change[0][2]);
+                    var newValue = encodeURIComponent(change[0][3]);
                     var rowIndex = change[0][0];
                     var columnIndex = change[0][1];
                     if(columnIndex == "endDate") {
