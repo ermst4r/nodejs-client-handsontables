@@ -30,7 +30,13 @@
     $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);
     $deleted = (isset($_GET['deleted']) ? $_GET['deleted'] : -0);
     ?>
-    <p> <a href="?website=cupones&updated=<?php echo $updated;?>">Cupones</a> | <a href="?website=cuponation&updated=<?php echo $updated;?>">Cuponation</a> </p>
+    <p> <a href="?website=cupones&updated=<?php echo $updated;?>">Cupones</a> |
+        <a href="?website=cuponation&updated=<?php echo $updated;?>">Cuponation</a>  |
+        <a href="?website=cupon_es&updated=<?php echo $updated;?>">Cupon.es</a>  |
+        <a href="?website=cuponesmagicos&updated=<?php echo $updated;?>">Cuponesmagicos</a>
+
+
+    </p>
     <p>You are now editing <span style="color:red; font-weight: bold;"><?php echo ucfirst($_GET['website']);?></span>
         <span style="font-size:12px; ">
 
@@ -156,7 +162,7 @@
                     // add class "negative"
                     ajax('http://localhost:3000/api/check_content/'+shopName, 'POST','content_hash='+encodeURIComponent(value),  function (res) {
                         if(res.responseText=="0") {
-                            console.log(value);
+
                             td.style.fontWeight = 'normal';
                             td.style.color = 'black';
                             td.style.background = '#bfecc7';
