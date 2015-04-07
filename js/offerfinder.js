@@ -1,23 +1,20 @@
+function spiderWebsite() {
+    var answer = confirm('Are you sure? Dont do this to often, because it will fetch ' + shopName.toUpperCase());
+    if (answer) {
+        $.ajax({
+            context: document.body,
+            type: 'GET',
+            url: hostName + '/api/run_spider/' + shopName,
+            success: function (data) {
+                $(".loading").after("Job will be run! Please check back in 1 minute for the updated actions");
+            }
+        });
+    }
+}
+
 $(document).ready(function () {
     var scriptPram = document.getElementById('offerfinder');
     hostName = scriptPram.getAttribute('data-apiurl');
-
-
-//IE, Opera, Safari
-    $('#error').bind('mousewheel', function (e) {
-        if (e.wheelDelta < 0) {
-            //scroll down
-            console.log('Down');
-        } else {
-            //scroll up
-            console.log('Up');
-        }
-
-        //prevent page fom scrolling
-        return false;
-    });
-
-
     function confirmation(msg, url) {
         var answer = confirm(msg)
         if (answer) {
@@ -26,22 +23,11 @@ $(document).ready(function () {
 
     }
 
-    var loaded = false;
     loadedArray = new Array();
-    function spiderWebsite() {
-        var answer = confirm('Are you sure? Dont do this to often, because it will fetch ' + shopName.toUpperCase());
-        if (answer) {
-            $.ajax({
-                context: document.body,
-                type: 'GET',
-                url: hostName + '/api/run_spider/' + shopName,
-                success: function (data) {
-                    $(".loading").after("Job will be run! Please check back in 1 minute for the updated actions");
-                }
-            });
-        }
 
-    }
+
+
+
 
     var QueryString = function () {
         // This function is anonymous, is executed immediately and
@@ -83,15 +69,36 @@ $(document).ready(function () {
         contextMenuString = "Redo this row";
         deleted = 1;
     }
+
+
+
+
+    var jqxhr = $.ajax({
+        type: 'GET',
+        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted,
+        context: document.body,
+        global: false,
+        async:false,
+        success: function(data) {
+            return data;
+        }
+    }).responseText;
+    jsonSearch = JSON.parse(jqxhr);
+
+
+
+
+
+
+
     $.ajax({
         context: document.body,
         type: 'GET',
         url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted,
-
         success: function (data) {
             $("#loading").hide();
             hot.loadData(data);
-            ht.setDataAtCell(0, 0, 'new value');
+
         }
     });
     var
@@ -102,7 +109,7 @@ $(document).ready(function () {
         save = document.getElementById('save'),
         ipValidatorRegexp,
         hot;
-    ipValidatorRegexp = /^(?:\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b|null)$/;
+
 
     function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
 
@@ -119,30 +126,57 @@ $(document).ready(function () {
         }
         if (col == 2) {
             // add class "negative"
-            $.ajax({
-                context: document.body,
-                type: 'POST',
-                data: 'content_hash=' + encodeURIComponent(value),
-                url: hostName + '/api/check_content/' + shopName,
-                beforeSend: function() {
-                    $("#loading").show();
+            var orginvalue = String(value);
+            switch (shopName) {
+                case 'cupones':
+                    orginvalue.replace("      ","").replace("      ","").slice(0,-1).replace("  ","");
+                break;
+                case 'cuponation':
+                    orginvalue.replace("-", "").replace("+", "").replace("\"", "");
+                break;
+                case 'cuponesmagicos':
+                    orginvalue.trim().replace(/\r?\n|\r/g, " ");
+                break;
+                case 'cupon_es':
+                    orginvalue.replace(/\r?\n|\r/g, " ").trim().replace("-","").replace("+","").replace("\"","");
+                break;
+            }
 
-                },
-                success: function (data) {
-                    if (data == "0") {
-                        td.style.fontWeight = 'normal';
-                        td.style.color = 'black';
-                        td.style.background = '#bfecc7';
-                    } else {
-                        td.style.fontWeight = 'normal';
-                        td.style.color = 'black';
-                        td.style.background = '#f3c0c0';
-                    }
-                    $("#loading").hide();
-                }
+          if(jsonSearch.indexOf(orginvalue) == -1) {
+              td.style.fontWeight = 'normal';
+              td.style.color = 'black';
+              td.style.background = '#bfecc7';
 
+          } else {
+              td.style.fontWeight = 'normal';
+              td.style.color = 'black';
+              td.style.background = '#f3c0c0';
 
-            });
+          }
+          //  $.ajax({
+          //      context: document.body,
+          //      type: 'POST',
+          //      data: 'content_hash=' + encodeURIComponent(value),
+          //      url: hostName + '/api/check_content/' + shopName,
+          //      beforeSend: function() {
+          //          $("#loading").show();
+          //
+          //      },
+          //      success: function (data) {
+          //          if (data == "0") {
+          //              td.style.fontWeight = 'normal';
+          //              td.style.color = 'black';
+          //              td.style.background = '#bfecc7';
+          //          } else {
+          //              td.style.fontWeight = 'normal';
+          //              td.style.color = 'black';
+          //              td.style.background = '#f3c0c0';
+          //          }
+          //          $("#loading").hide();
+          //      }
+          //
+          //
+          //  });
 
 
         }
@@ -188,11 +222,6 @@ $(document).ready(function () {
             cellProperties.renderer = "negativeValueRenderer"; // uses lookup map
             return cellProperties;
         },
-
-        afterLoadData: function () {
-            console.log(loadedArray);
-        },
-
 
         beforeChange: function (change, source) {
             var oldValue = change[0][3];
