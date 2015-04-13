@@ -99,32 +99,51 @@ $(document).ready(function () {
             $("#loading").hide();
             hot.loadData(data);
 
+
         }
     });
     var
         container = document.getElementById('example1'),
-        exampleConsole = document.getElementById('example1console'),
         autosave = document.getElementById('autosave'),
         load = document.getElementById('load'),
         save = document.getElementById('save'),
-        ipValidatorRegexp,
         hot;
 
 
+
+
+
+    var oldShopName ='';
     function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
 
 
         Handsontable.renderers.TextRenderer.apply(this, arguments);
         if (col == 2) {
-            td.style.fontWeight = 'normal';
-            td.style.color = 'black';
-            td.style.background = '#f3c0c0';
+            //td.style.fontWeight = 'normal';
+            //td.style.color = 'black';
+            //td.style.background = '#f3c0c0';
         }
 
         if (col == 1 || col == 0) {
             cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
         }
+
+
+        // make  the rowline flipit blue
+        if(col == 0) {
+            oldShopName = value;
+        }
+        if(col == 1 || col == 0 ) {
+
+            if(oldShopName == 'flipit_es') {
+                td.style.fontWeight = 'normal';
+                td.style.color = 'black';
+                td.style.background = 'blue';
+            }
+        }
+
         if (col == 2) {
+            console.log(oldShopName);
             // add class "negative"
             var orginvalue = String(value);
             switch (shopName) {
@@ -141,45 +160,31 @@ $(document).ready(function () {
                     orginvalue.replace(/\r?\n|\r/g, " ").trim().replace("-","").replace("+","").replace("\"","");
                 break;
             }
+            if(oldShopName == 'flipit_es') {
+                td.style.fontWeight = 'normal';
+                td.style.color = 'black';
+                td.style.background = 'blue';
+            } else {
+                if(jsonSearch.indexOf(orginvalue) == -1) {
+                    td.style.fontWeight = 'normal';
+                    td.style.color = 'black';
+                    td.style.background = '#bfecc7';
 
-          if(jsonSearch.indexOf(orginvalue) == -1) {
-              td.style.fontWeight = 'normal';
-              td.style.color = 'black';
-              td.style.background = '#bfecc7';
+                } else {
+                    td.style.fontWeight = 'normal';
+                    td.style.color = 'black';
+                    td.style.background = '#f3c0c0';
 
-          } else {
-              td.style.fontWeight = 'normal';
-              td.style.color = 'black';
-              td.style.background = '#f3c0c0';
-
-          }
-          //  $.ajax({
-          //      context: document.body,
-          //      type: 'POST',
-          //      data: 'content_hash=' + encodeURIComponent(value),
-          //      url: hostName + '/api/check_content/' + shopName,
-          //      beforeSend: function() {
-          //          $("#loading").show();
-          //
-          //      },
-          //      success: function (data) {
-          //          if (data == "0") {
-          //              td.style.fontWeight = 'normal';
-          //              td.style.color = 'black';
-          //              td.style.background = '#bfecc7';
-          //          } else {
-          //              td.style.fontWeight = 'normal';
-          //              td.style.color = 'black';
-          //              td.style.background = '#f3c0c0';
-          //          }
-          //          $("#loading").hide();
-          //      }
-          //
-          //
-          //  });
+                }
+            }
 
 
         }
+
+
+
+
+
     }
 
 
@@ -212,12 +217,11 @@ $(document).ready(function () {
             {data: 'productName'},
             {data: 'endDate'}
         ],
-        columnSorting: {
-            column: 1,
-            sortOrder: true
-        },
+
         cells: function (row, col, prop) {
             var cellProperties = {};
+
+
 
             cellProperties.renderer = "negativeValueRenderer"; // uses lookup map
             return cellProperties;
@@ -261,4 +265,5 @@ $(document).ready(function () {
             }
         }
     });
+
 });
