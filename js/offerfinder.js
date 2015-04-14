@@ -1,4 +1,4 @@
-function spiderWebsite() {
+function spiderWebsite(shopName) {
     var answer = confirm('Are you sure? Dont do this to often, because it will fetch ' + shopName.toUpperCase());
     if (answer) {
         $.ajax({
@@ -23,9 +23,30 @@ $(document).ready(function () {
 
     }
 
-    loadedArray = new Array();
+    var jqxhrFlipit = $.ajax({
+        type: 'GET',
+        url: hostName + '/api/getflipitdata/',
+        context: document.body,
+        global: false,
+        async:false,
+        success: function(data) {
+            return data;
+        }
+    }).responseText;
+    flipitshops = JSON.parse(jqxhrFlipit);
 
 
+    var jqxhrNoFlipit = $.ajax({
+        type: 'GET',
+        url: hostName + '/api/noflipitdata/',
+        context: document.body,
+        global: false,
+        async:false,
+        success: function(data) {
+            return data;
+        }
+    }).responseText;
+    noflipitshops = JSON.parse(jqxhrNoFlipit);
 
 
 
@@ -85,19 +106,28 @@ $(document).ready(function () {
     }).responseText;
     jsonSearch = JSON.parse(jqxhr);
 
-
-
-
-
-
-
     $.ajax({
         context: document.body,
         type: 'GET',
         url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted,
         success: function (data) {
             $("#loading").hide();
-            hot.loadData(data);
+            var jsonArr = [];
+        for(var i =0; i<data.length; i++) {
+
+            if(flipitshops.indexOf(String(data[i].shopName)) > -1 && noflipitshops.indexOf(String(data[i].shopName)) != -1) {
+                jsonArr.push({
+                    shopName:data[i].shopName,
+                    website:data[i].website,
+                    productName:data[i].productName,
+                    endDate:data[i].endDate
+                });
+            }
+
+        }
+
+
+            hot.loadData(jsonArr);
 
 
         }
@@ -133,12 +163,12 @@ $(document).ready(function () {
         if(col == 0) {
             oldShopName = value;
         }
-        if(col == 1 || col == 0 ) {
+        if(col == 1 || col == 0 || col ==3 ) {
 
             if(oldShopName == 'flipit_es') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = 'blue';
+                td.style.background = '#58acfb';
             }
         }
 
@@ -163,7 +193,8 @@ $(document).ready(function () {
             if(oldShopName == 'flipit_es') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = 'blue';
+                td.style.background = '#58acfb';
+                cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
             } else {
                 if(jsonSearch.indexOf(orginvalue) == -1) {
                     td.style.fontWeight = 'normal';

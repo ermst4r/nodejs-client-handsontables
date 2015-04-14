@@ -23,6 +23,14 @@ $websiteUrl = 'http://sandbox.ermst4r.nl/contentscraper/';
     <script src="js/jquery.js"></script>
     <script src="js/md5.js"></script>
 </head>
+<div style="float: right">
+    <B> Fetch Data</B><BR>
+    <a href="javascript:spiderWebsite('cupones')">Cupones</a><BR>
+    <a href="javascript:spiderWebsite('cuponation')">Cuponation</a><BR>
+    <a href="javascript:spiderWebsite('cupon_es')">Cupon.es</a><BR>
+    <a href="javascript:spiderWebsite('cuponesmagicos')">Cuponesmagicos</a><BR>
+</div>
+
 <div align="left">
     <div id="error" style="border:3px solid red; width: 350px; height: 100px; padding: 5px;display:none;">
         <BR>
@@ -30,29 +38,31 @@ $websiteUrl = 'http://sandbox.ermst4r.nl/contentscraper/';
         <div id="msg" style="font-size:15px;"> </div>
     </div>
 
-    <p> <a href="?website=cupones&updated=<?php echo $updated;?>">Cupones</a> |
-        <a href="?website=cuponation&updated=<?php echo $updated;?>">Cuponation</a>  |
-        <a href="?website=cupon_es&updated=<?php echo $updated;?>">Cupon.es</a>  |
-        <a href="?website=cuponesmagicos&updated=<?php echo $updated;?>">Cuponesmagicos</a>
-
+    <p>
 
     </p>
-    <p>You are now editing <span style="color:red; font-weight: bold;"><?php echo ucfirst($_GET['website']);?></span>
+
         <span style="font-size:12px; ">
 
-               <a style="color:black;" href="<?php echo $websiteUrl;?>?updated=-1&website=<?php echo $_GET['website'];?>"> <?php echo (($updated == -1) ? '<B style="color:black;"> (all content) </B>' : '(all content)');?></a>  /
-                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=0&website=<?php echo $_GET['website'];?>"> <?php echo (($updated == 0) ? '<B style="color:black;"> (unedited content) </B>' : '(unedited content)');?></a> /
-                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=1&website=<?php echo $_GET['website'];?>">  <?php echo (($updated == 1) ? '<B style="color:black;"> (edited content) </B>' : '(edited content)');?> </a> /
-                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=-1&website=<?php echo $_GET['website'];?>&deleted=1" title="Show trascan">   <img src="images/trash.gif"> </a>
+               <a style="color:black;" href="<?php echo $websiteUrl;?>?updated=-1"> <?php echo (($updated == -1) ? '<B style="color:black;"> (all content) </B>' : '(all content)');?></a>  /
+                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=0"> <?php echo (($updated == 0) ? '<B style="color:black;"> (unedited content) </B>' : '(unedited content)');?></a> /
+                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=1">  <?php echo (($updated == 1) ? '<B style="color:black;"> (edited content) </B>' : '(edited content)');?> </a> /
+                <a  style="color:black;" href="<?php echo $websiteUrl;?>?updated=-1&deleted=1" title="Show trascan">   <img src="images/trash.gif"> </a>
 
         </span> </p>
-    <a href="<?php echo $apiUrl;?>/api/getdata/<?php echo $_GET['website'];?>/json/<?php echo $updated;?>/<?php echo $deleted;?>" target="_blank"><img src="images/json_icon.png" title="Export JSON File" ></a> |
-    <a href="<?php echo $apiUrl;?>/api/getdata/<?php echo $_GET['website'];?>/csv/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/csv_icon.png" title="Export Csv File" ></a> |
-    <a href="<?php echo $apiUrl;?>/api/getdata/<?php echo $_GET['website'];?>/xls/<?php echo $updated;?>/<?php echo $deleted;?>"><img src="images/excel_icon.png" title="Export Excel File" ></a> |
-    <a href="javascript:spiderWebsite();" title="dont do that to often"  style="color:red; font-weight: bold;"><img src="images/play.png" title="Run Scraper Now!" ></a>
+    <BR>
+
+    Export to:
+    <a href="<?php echo $apiUrl;?>/api/getdata/json/1/<?php echo $deleted;?>" target="_blank"><img src="images/json_icon.png" title="Export JSON File" ></a> |
+    <a href="<?php echo $apiUrl;?>/api/getdata/csv/1/<?php echo $deleted;?>"><img src="images/csv_icon.png" title="Export Csv File" ></a> |
+    <a href="<?php echo $apiUrl;?>/api/getdata/xls/1/<?php echo $deleted;?>"><img src="images/excel_icon.png" title="Export Excel File" ></a> |
+
     <BR><BR>
     <div class="loading" style="font-weight: bold; color:green;"> </div>
+
 </div>
+
+
 
 <div class="wrapper">
     <div class="wrapper-row">
