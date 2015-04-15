@@ -168,7 +168,7 @@ $(document).ready(function () {
             if(oldShopName == 'flipit_es') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = '#58acfb';
+                td.style.background = '#86dbff';
             }
         }
 
@@ -193,7 +193,7 @@ $(document).ready(function () {
             if(oldShopName == 'flipit_es') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = '#58acfb';
+                td.style.background = '#86dbff';
                 cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
             } else {
                 if(jsonSearch.indexOf(orginvalue) == -1) {
