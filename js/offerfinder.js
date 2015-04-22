@@ -173,7 +173,7 @@ $(document).ready(function () {
         }
 
         if (col == 2) {
-            console.log(oldShopName);
+
             // add class "negative"
             var orginvalue = String(value);
             switch (shopName) {
@@ -196,6 +196,7 @@ $(document).ready(function () {
                 td.style.background = '#86dbff';
                 cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
             } else {
+
                 if(jsonSearch.indexOf(orginvalue) == -1) {
                     td.style.fontWeight = 'normal';
                     td.style.color = 'black';

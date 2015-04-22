@@ -136,9 +136,9 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="http://localhost:3000/api/getdata/xls/1/0"><i class="icon-download"></i>Excel </a></li>
-                    <li><a href="http://localhost:3000/api/getdata/csv/1/0"><i class="icon-download"></i>Csv </a></li>
-                    <li><a href="http://localhost:3000/api/getdata/json/1/0"><i class="icon-download"></i>Json</a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0"><i class="icon-download"></i>Excel </a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/csv/1/0"><i class="icon-download"></i>Csv </a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/json/1/0"><i class="icon-download"></i>Json</a></li>
                 </ul>
             </li>
 
@@ -150,12 +150,19 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
+                    <li><a href="javascript:spiderWebsite('flipit_es')"><i class="icon-upload"></i>Flipit ES (master)</a></li>
                     <li><a href="javascript:spiderWebsite('cupones')"><i class="icon-upload"></i>Cupones</a></li>
                     <li><a href="javascript:spiderWebsite('cuponation')"><i class="icon-upload"></i> Cuponation</a></li>
                     <li><a href="javascript:spiderWebsite('cupon_es')"><i class="icon-upload"></i>Cupon.es</a></li>
                     <li> <a href="javascript:spiderWebsite('cuponesmagicos')"><i class="icon-upload"></i>Cuponesmagicos</a> </li>
                 </ul>
             </li>
+            <li>
+                <a href="/help/help.pdf">
+                     <i class="icon-question"> </i> Help
+                </a>
+            </li>
+
         </ul>
         <!-- /Top Left Menu -->
 
