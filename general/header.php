@@ -3,7 +3,10 @@ $updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);
 $deleted = (isset($_GET['deleted']) ? $_GET['deleted'] : -0);
 $apiUrl = 'http://localhost:3000';
 $websiteUrl = 'http://sandbox.ermst4r.nl/contentscraper/';
-$currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
+$currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang='.$_GET['lang'];
+if(!isset($_GET['lang'])) {
+    header("Location:{$currentHomePage}");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +120,7 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                 <a href="<?php echo $currentHomePage;?>">
                     Home
                 </a>
+
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -124,9 +128,9 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=es';?>"><i class="icon-angle-right"></i>All content</a></li>
-                    <li><a href="<?php echo $_SERVER['PHP_SELF'].'?updated=0&lang=es';?>"><i class="icon-angle-right"></i>Unedited content</a></li>
-                    <li><a href="<?php echo $_SERVER['PHP_SELF'].'?updated=1&lang=es';?>"><i class="icon-angle-right"></i>Edited content</a></li>
+                    <li><a href="index.php<?php echo '?updated=-1&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>All content</a></li>
+                    <li><a href="index.php<?php echo '?updated=0&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>Unedited content</a></li>
+                    <li><a href="index.php<?php echo'?updated=1&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>Edited content</a></li>
                 </ul>
             </li>
 
@@ -136,9 +140,10 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0"><i class="icon-download"></i>Excel </a></li>
-                    <li><a href="<?php echo $apiUrl;?>/api/getdata/csv/1/0"><i class="icon-download"></i>Csv </a></li>
-                    <li><a href="<?php echo $apiUrl;?>/api/getdata/json/1/0"><i class="icon-download"></i>Json</a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0/<?php echo $_GET['lang'];?>/<?php echo date("d-m-Y");?>"><i class="icon-download"></i>Excel </a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0/<?php echo $_GET['lang'];?>/<?php echo date("d-m-Y");?>"><i class="icon-download"></i>Csv </a></li>
+                    <li><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0/<?php echo $_GET['lang'];?>/<?php echo date("d-m-Y");?>"><i class="icon-download"></i>Json</a></li>
+                    <li><a href="exportList.php?lang=<?php  echo $_GET['lang'];?>"><i class="icon-folder-close "></i>Choose By Date</a></li>
                 </ul>
             </li>
 
@@ -150,16 +155,21 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="javascript:spiderWebsite('flipit_es')"><i class="icon-upload"></i>Flipit ES (master)</a></li>
-                    <li><a href="javascript:spiderWebsite('cupones')"><i class="icon-upload"></i>Cupones</a></li>
-                    <li><a href="javascript:spiderWebsite('cuponation')"><i class="icon-upload"></i> Cuponation</a></li>
-                    <li><a href="javascript:spiderWebsite('cupon_es')"><i class="icon-upload"></i>Cupon.es</a></li>
-                    <li> <a href="javascript:spiderWebsite('cuponesmagicos')"><i class="icon-upload"></i>Cuponesmagicos</a> </li>
+                    <?php
+                    switch($_GET['lang']) {
+                        case 'es':
+                            include 'general/menu_es.php';
+                        break;
+                        case 'de':
+                            include 'general/menu_de.php';
+                        break;
+                    }
+                    ?>
                 </ul>
             </li>
             <li>
                 <a href="/help/help.pdf">
-                     <i class="icon-question"> </i> Help
+                    <i class="icon-question"> </i> Help
                 </a>
             </li>
 
@@ -168,10 +178,32 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
 
 
         <!-- /Top Right Menu -->
+
+        <!-- Top Right Menu -->
+        <ul class="nav navbar-nav navbar-right">
+
+            <!-- User Login Dropdown -->
+            <li class="dropdown user">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!--<img alt="" src="assets/img/avatar1_small.jpg" />-->
+                    <i class="icon-flag"></i>
+                    <span class="username">Countries</span>
+                    <i class="icon-caret-down small"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="index.php?updated=-1&lang=es"><i class="icon-flag"></i> Spain</a></li>
+                    <li><a href="index.php?updated=-1&lang=de"><i class="icon-flag"></i> Germany</a></li>
+
+
+                </ul>
+            </li>
+            <!-- /user login dropdown -->
+        </ul>
+        <!-- /Top Right Menu -->
+
     </div>
     <!-- /top navigation bar -->
 </header> <!-- /.header -->
-
 <div id="container">
     <div id="sidebar" class="sidebar-fixed">
         <div id="sidebar-content">
@@ -199,62 +231,3 @@ $currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang=es';
         <div id="divider" class="resizeable"></div>
     </div>
     <!-- /Sidebar -->
-
-    <div id="content">
-        <div class="container">
-            <!-- Breadcrumbs line -->
-            <div class="crumbs">
-                <ul id="breadcrumbs" class="breadcrumb">
-                    <li>
-                        <i class="icon-home"></i>
-                        <a href="index.html">Dashboard</a>
-                    </li>
-                    <li class="current">
-                        <a href="calendar.html" title="">Calendar</a>
-                    </li>
-                </ul>
-
-                <ul class="crumb-buttons">
-                    <li><a href="charts.html" title=""><i class="icon-signal"></i><span>Statistics</span></a></li>
-                </ul>
-            </div>
-            <!-- /Breadcrumbs line -->
-
-            <!--=== Page Header ===-->
-            <div class="page-header">
-                <div class="page-title">
-                 <h3> <img src="images/spain_flag_icon.png"> Spain   </h3>
-
-                    <span>Here you see all the offers of spain</span>
-                </div>
-            </div>
-            <!-- /Page Header -->
-
-            <!--=== Page Content ===-->
-            <div class="row">
-                <!--=== Example Box ===-->
-                <div class="col-md-12">
-
-                    <div class="loading" style="font-weight: bold; color:green;"> </div>
-
-                            <div class="wrapper">
-                                <div class="wrapper-row">
-                                    <div id="loading" > <img src="images/ajax-loader.gif"> </div>
-                                    <div id="example1"  ></div>
-
-                                </div>
-
-                            </div>
-                            <script src="js/offerfinder.js" data-apiurl="<?php echo $apiUrl;?>" id="offerfinder"> </script>
-                        </div>
-
-
-
-        </div>
-        <!-- /.container -->
-
-    </div>
-</div>
-
-</body>
-</html>

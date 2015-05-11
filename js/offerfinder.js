@@ -12,9 +12,11 @@ function spiderWebsite(shopName) {
     }
 }
 
+
 $(document).ready(function () {
     var scriptPram = document.getElementById('offerfinder');
     hostName = scriptPram.getAttribute('data-apiurl');
+    country = scriptPram.getAttribute('data-country');
     function confirmation(msg, url) {
         var answer = confirm(msg)
         if (answer) {
@@ -25,7 +27,7 @@ $(document).ready(function () {
 
     var jqxhrFlipit = $.ajax({
         type: 'GET',
-        url: hostName + '/api/getflipitdata/',
+        url: hostName + '/api/getflipitdata/'+country,
         context: document.body,
         global: false,
         async:false,
@@ -38,7 +40,7 @@ $(document).ready(function () {
 
     var jqxhrNoFlipit = $.ajax({
         type: 'GET',
-        url: hostName + '/api/noflipitdata/',
+        url: hostName + '/api/noflipitdata/'+country,
         context: document.body,
         global: false,
         async:false,
@@ -96,7 +98,7 @@ $(document).ready(function () {
 
     var jqxhr = $.ajax({
         type: 'GET',
-        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted,
+        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted+'/'+country,
         context: document.body,
         global: false,
         async:false,
@@ -109,7 +111,7 @@ $(document).ready(function () {
     $.ajax({
         context: document.body,
         type: 'GET',
-        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted,
+        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted +'/'+country,
         success: function (data) {
             $("#loading").hide();
             var jsonArr = [];
@@ -117,7 +119,7 @@ $(document).ready(function () {
 
             if(flipitshops.indexOf(String(data[i].shopName)) > -1 && noflipitshops.indexOf(String(data[i].shopName)) != -1) {
                 jsonArr.push({
-                    shopName:data[i].shopName,
+                    shopName:data[i].shopName.replace('z',''),
                     website:data[i].website,
                     productName:data[i].productName,
                     endDate:data[i].endDate
@@ -165,7 +167,7 @@ $(document).ready(function () {
         }
         if(col == 1 || col == 0 || col ==3 ) {
 
-            if(oldShopName == 'flipit_es') {
+            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
                 td.style.background = '#86dbff';
@@ -189,8 +191,9 @@ $(document).ready(function () {
                 case 'cupon_es':
                     orginvalue.replace(/\r?\n|\r/g, " ").trim().replace("-","").replace("+","").replace("\"","");
                 break;
+
             }
-            if(oldShopName == 'flipit_es') {
+            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
                 td.style.background = '#86dbff';
