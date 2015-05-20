@@ -1,12 +1,5 @@
-<?php
-$updated = (isset($_GET['updated']) ? $_GET['updated'] : -1);
-$deleted = (isset($_GET['deleted']) ? $_GET['deleted'] : -0);
-$apiUrl = 'http://localhost:3000';
-$websiteUrl = 'http://sandbox.ermst4r.nl/contentscraper/';
-$currentHomePage = $_SERVER['PHP_SELF'].'?updated=-1&lang='.$_GET['lang'];
-if(!isset($_GET['lang'])) {
-    header("Location:{$currentHomePage}");
-}
+<?php include 'config.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +10,8 @@ if(!isset($_GET['lang'])) {
 
     <!--=== CSS ===-->
     <base href="<?php echo $websiteUrl;?>">
+    <!--=== CSS ===-->
+
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
@@ -25,6 +20,7 @@ if(!isset($_GET['lang'])) {
     <!--[if lt IE 9]>
     <link rel="stylesheet" type="text/css" href="plugins/jquery-ui/jquery.ui.1.10.2.ie.css"/>
     <![endif]-->
+
     <!-- Theme -->
     <link href="assets/css/main.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
@@ -36,6 +32,9 @@ if(!isset($_GET['lang'])) {
     <link rel="stylesheet" href="assets/css/fontawesome/font-awesome-ie7.min.css">
     <![endif]-->
 
+    <!--[if IE 8]>
+    <link href="assets/css/ie8.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
     <!--=== JavaScript ===-->
@@ -63,6 +62,31 @@ if(!isset($_GET['lang'])) {
     <script type="text/javascript" src="plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script type="text/javascript" src="plugins/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
 
+    <!-- Page specific plugins -->
+    <!-- Charts -->
+    <script type="text/javascript" src="plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <script type="text/javascript" src="plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="plugins/blockui/jquery.blockUI.min.js"></script>
+
+    <!-- Pickers -->
+    <script type="text/javascript" src="plugins/pickadate/picker.js"></script>
+    <script type="text/javascript" src="plugins/pickadate/picker.date.js"></script>
+    <script type="text/javascript" src="plugins/pickadate/picker.time.js"></script>
+    <script type="text/javascript" src="plugins/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Noty -->
+    <script type="text/javascript" src="plugins/noty/jquery.noty.js"></script>
+    <script type="text/javascript" src="plugins/noty/layouts/top.js"></script>
+    <script type="text/javascript" src="plugins/noty/themes/default.js"></script>
+
+    <!-- Slim Progress Bars -->
+    <script type="text/javascript" src="plugins/nprogress/nprogress.js"></script>
+
+    <!-- Bootbox -->
+    <script type="text/javascript" src="plugins/bootbox/bootbox.js"></script>
+
     <!-- App -->
     <script type="text/javascript" src="assets/js/app.js"></script>
     <script type="text/javascript" src="assets/js/plugins.js"></script>
@@ -78,13 +102,23 @@ if(!isset($_GET['lang'])) {
         });
     </script>
 
+    <!-- Demo JS -->
+    <script type="text/javascript" src="assets/js/custom.js"></script>
+    <script type="text/javascript" src="assets/js/demo/ui_general.js"></script>
+    <script type="text/javascript" src="assets/js/custom.js"></script>
+    <script type="text/javascript" src="assets/js/demo/ui_general.js"></script>
+
+    <?php if(basename($_SERVER['PHP_SELF']) == 'index.php') : ?>
     <script data-jsfiddle="common" src="dist/handsontable.full.js"></script>
     <link data-jsfiddle="common" rel="stylesheet" media="screen" href="dist/handsontable.full.css">
     <script  data-jsfiddle="common" src="js/samples.js"></script>
     <script src="js/highlight/highlight.pack.js"></script>
     <link rel="stylesheet" media="screen" href="js/highlight/styles/github.css">
-    <script src="js/jquery.js"></script>
+
     <script src="js/md5.js"></script>
+    <?php endif;?>
+
+
 </head>
 
 <body>
@@ -128,9 +162,9 @@ if(!isset($_GET['lang'])) {
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="index.php<?php echo '?updated=-1&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>All content</a></li>
-                    <li><a href="index.php<?php echo '?updated=0&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>Unedited content</a></li>
-                    <li><a href="index.php<?php echo'?updated=1&lang='.$_GET['lang'];?>"><i class="icon-angle-right"></i>Edited content</a></li>
+                    <li><a href="index.php<?php echo '?updated=-1&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>All content</a></li>
+                    <li><a href="index.php<?php echo '?updated=0&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>Unedited content</a></li>
+                    <li><a href="index.php<?php echo'?updated=1&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>Edited content</a></li>
                 </ul>
             </li>
 
@@ -158,11 +192,35 @@ if(!isset($_GET['lang'])) {
                     <?php
                     switch($_GET['lang']) {
                         case 'es':
-                            include 'general/menu_es.php';
+                           ?>
+                            <li><a href="javascript:spiderWebsite('flipit_es')"><i class="icon-upload"></i>Flipit ES (master)</a></li>
+                            <li><a href="javascript:spiderWebsite('cupones')"><i class="icon-upload"></i>Cupones</a></li>
+                            <li><a href="javascript:spiderWebsite('cuponation')"><i class="icon-upload"></i> Cuponation</a></li>
+                            <li><a href="javascript:spiderWebsite('cupon_es')"><i class="icon-upload"></i>Cupon.es</a></li>
+                            <li> <a href="javascript:spiderWebsite('cuponesmagicos')"><i class="icon-upload"></i>Cuponesmagicos</a> </li>
+                    <?php
                         break;
-                        case 'de':
-                            include 'general/menu_de.php';
+                        case 'de': ?>
+
+                            <li><a href="javascript:spiderWebsite('flipit_de')"><i class="icon-upload"></i>Flipit DE (master)</a></li>
+                            <li><a href="javascript:spiderWebsite('gutscheincodes')"><i class="icon-upload"></i>Gutscheincodes</a></li>
+                            <li><a href="javascript:spiderWebsite('sparwelt')"><i class="icon-upload"></i>sparwelt</a></li>
+                            <li><a href="javascript:spiderWebsite('gutscheinsammler')"><i class="icon-upload"></i>gutscheinsammler</a></li>
+                            <li><a href="javascript:spiderWebsite('gutscheinpony_de')"><i class="icon-upload"></i>gutscheinpony</a></li>
+
+                    <?php
                         break;
+                        case 'in':
+                            ?>
+
+                            <li><a href="javascript:spiderWebsite('flipit_in')"><i class="icon-upload"></i>Flipit IN (master)</a></li>
+                            <li><a href="javascript:spiderWebsite('cashkaro_in')"><i class="icon-upload"></i>Cashkaro</a></li>
+                            <li><a href="javascript:spiderWebsite('cuponation_in')"><i class="icon-upload"></i>Cuponation India</a></li>
+                            <li><a href="javascript:spiderWebsite('couponraja_in')"><i class="icon-upload"></i>Coupon Raja</a></li>
+                            <li><a href="javascript:spiderWebsite('couponzguru_in')"><i class="icon-upload"></i>Couponzguru</a></li>
+
+                    <?php break;
+
                     }
                     ?>
                 </ul>
@@ -193,7 +251,7 @@ if(!isset($_GET['lang'])) {
                 <ul class="dropdown-menu">
                     <li><a href="index.php?updated=-1&lang=es"><i class="icon-flag"></i> Spain</a></li>
                     <li><a href="index.php?updated=-1&lang=de"><i class="icon-flag"></i> Germany</a></li>
-
+                    <li><a href="index.php?updated=-1&lang=de"><i class="icon-flag"></i> India </a></li>
 
                 </ul>
             </li>
@@ -216,10 +274,24 @@ if(!isset($_GET['lang'])) {
                         Offers
                     </a>
                     <ul class="sub-menu">
-                        <li class="current">
-                            <a href="<?php echo $currentHomePage;?>">
+                        <li>
+                            <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=es&scrapeStartDate=';?>">
                                 <i class="icon-angle-right"></i>
                                 Spain
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=de';?>">
+                                <i class="icon-angle-right"></i>
+                                Germany
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=in';?>">
+                                <i class="icon-angle-right"></i>
+                                India
                             </a>
                         </li>
 

@@ -2,50 +2,75 @@
 
 
 
-
-    <div id="content">
+    <div id="content" style="margin-top:-40px;">
         <div class="container">
-            <!-- Breadcrumbs line -->
-            <div class="crumbs">
-                <ul id="breadcrumbs" class="breadcrumb">
-                    <li>
-                        <i class="icon-home"></i>
-                        <a href="index.html">Dashboard</a>
-                    </li>
-                    <li class="current">
-                        <a href="calendar.html" title="">Calendar</a>
-                    </li>
-                </ul>
 
-                <ul class="crumb-buttons">
-                    <li><a href="charts.html" title=""><i class="icon-signal"></i><span>Statistics</span></a></li>
-                </ul>
-            </div>
+
+            <!-- /Normal -->
+
             <!-- /Breadcrumbs line -->
 
             <!--=== Page Header ===-->
             <div class="page-header">
                 <div class="page-title">
+                    <div class="form-group">
+                    <form method="post">
+                        <div class="col-md-9">
+
+                        </div>
+                    </div>
+
+
+
                 </div>
             </div>
             <!-- /Page Header -->
 
             <!--=== Page Content ===-->
-            <div class="row">
+            <div class="row" >
                 <!--=== Example Box ===-->
                 <div class="col-md-12">
 
+                    <!--=== Page Content ===-->
+                    <div class="row">
+
+
+                            <table class="table table-striped table-bordered table-hover" id="showexport" style="width: 500px;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Action</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr>
+                                    <td >  <input type="text" name="date" class="form-control pickdateofferfind" value="<?php echo (isset($_GET['scrapeStartDate']) ? $_GET['scrapeStartDate'] : '');?> "> </td>
+
+                                    <td>     <input type="submit" name="sbmDate" class="form-control btn btn-success" value="Set date"> </td>
+                                </tr>
+
+
+
+                                </tbody>
+                            </table>
+
+
+
+                        <!-- /.container -->
                     <div class="loading" style="font-weight: bold; color:green;"> </div>
 
                             <div class="wrapper">
                                 <div class="wrapper-row">
                                     <div id="loading" > <img src="images/ajax-loader.gif"> </div>
-                                    <div id="example1"  ></div>
+                                    <div id="example1"   ></div>
 
                                 </div>
 
                             </div>
-                            <script src="js/offerfinder.js" data-apiurl="<?php echo $apiUrl;?>" data-country="<?php echo $_GET['lang'];?>" id="offerfinder"> </script>
+
+                            <script src="js/offerfinder.js" data-scrapestartdate="<?php echo ( $_GET['scrapeStartDate']  || strlen($_GET['scrapeStartDate']) > 0   ? $_GET['scrapeStartDate'] : 0 );?>" data-apiurl="<?php echo $apiUrl;?>" data-country="<?php echo $_GET['lang'];?>" id="offerfinder"> </script>
                         </div>
 
 
@@ -58,3 +83,13 @@
 
 </body>
 </html>
+<script>
+    $('.pickdateofferfind').pickadate({
+        // Escape any “rule” characters with an exclamation mark (!).
+        format: 'dd-mm-yyyy',
+        formatSubmit: 'yyyy/mm/dd',
+        hiddenPrefix: 'prefix__',
+        hiddenSuffix: '__suffix'
+    })
+
+</script>

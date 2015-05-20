@@ -17,6 +17,7 @@ $(document).ready(function () {
     var scriptPram = document.getElementById('offerfinder');
     hostName = scriptPram.getAttribute('data-apiurl');
     country = scriptPram.getAttribute('data-country');
+    scrapeStartDate = scriptPram.getAttribute('data-scrapestartdate');
     function confirmation(msg, url) {
         var answer = confirm(msg)
         if (answer) {
@@ -88,17 +89,19 @@ $(document).ready(function () {
     if (typeof QueryString.deleted === 'undefined') {
         contextMenuString = "Delete this row";
         deleted = 0;
+        deleteContent = 1;
     } else {
         contextMenuString = "Redo this row";
         deleted = 1;
+        deleteContent = 0;
     }
 
 
 
-
+console.log(scrapeStartDate);
     var jqxhr = $.ajax({
         type: 'GET',
-        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted+'/'+country,
+        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted+'/'+country+'/'+scrapeStartDate,
         context: document.body,
         global: false,
         async:false,
@@ -111,7 +114,7 @@ $(document).ready(function () {
     $.ajax({
         context: document.body,
         type: 'GET',
-        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted +'/'+country,
+        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted +'/'+country+'/'+scrapeStartDate,
         success: function (data) {
             $("#loading").hide();
             var jsonArr = [];
@@ -119,7 +122,7 @@ $(document).ready(function () {
 
             if(flipitshops.indexOf(String(data[i].shopName)) > -1 && noflipitshops.indexOf(String(data[i].shopName)) != -1) {
                 jsonArr.push({
-                    shopName:data[i].shopName.replace('z',''),
+                    shopName:data[i].shopName,
                     website:data[i].website,
                     productName:data[i].productName,
                     endDate:data[i].endDate
@@ -167,10 +170,10 @@ $(document).ready(function () {
         }
         if(col == 1 || col == 0 || col ==3 ) {
 
-            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de') {
+            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de' ||  oldShopName =='zflipit_in') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = '#86dbff';
+                td.style.background = '#beeafd';
             }
         }
 
@@ -193,17 +196,17 @@ $(document).ready(function () {
                 break;
 
             }
-            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de') {
+            if(oldShopName == 'zflipit_es' || oldShopName =='zflipit_de' ||  oldShopName =='zflipit_in') {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
-                td.style.background = '#86dbff';
+                td.style.background = '#beeafd';
                 cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
             } else {
 
                 if(jsonSearch.indexOf(orginvalue) == -1) {
                     td.style.fontWeight = 'normal';
                     td.style.color = 'black';
-                    td.style.background = '#bfecc7';
+                    td.style.background = '#d8f3dd';
 
                 } else {
                     td.style.fontWeight = 'normal';
@@ -234,8 +237,7 @@ $(document).ready(function () {
         minSpareRows: 0,
         contextMenu: {
             callback: function (key, options) {
-                ajax(hostName + '/api/delete_code', 'POST', "delete=" + deleted + "&oldValue=" + this.getDataAtCell(options.end.row, 2) + "&shopName=" + shopName, function (res) {
-
+                ajax(hostName + '/api/delete_code', 'POST', "delete=" + deleteContent + "&oldValue=" + this.getDataAtCell(options.end.row, 2) + "&shopName=" + this.getDataAtCell(options.end.row, 1), function (res) {
                 });
                 this.alter('remove_row', options.end.row);
             },

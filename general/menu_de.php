@@ -1,2 +1,0 @@
-<li><a href="javascript:spiderWebsite('flipit_de')"><i class="icon-upload"></i>Flipit DE (master)</a></li>
-<li><a href="javascript:spiderWebsite('gutscheincodes')"><i class="icon-upload"></i>Gutscheincodes</a></li>
