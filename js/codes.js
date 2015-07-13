@@ -28,7 +28,7 @@ $(document).ready(function () {
 
     var jqxhrFlipit = $.ajax({
         type: 'GET',
-        url: hostName + '/api/getflipitdata/'+country+'/0',
+        url: hostName + '/api/getflipitdata/'+country+'/1',
         context: document.body,
         global: false,
         async:false,
@@ -97,11 +97,9 @@ $(document).ready(function () {
     }
 
 
-
-console.log(scrapeStartDate);
     var jqxhr = $.ajax({
         type: 'GET',
-        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted+'/'+country+'/'+scrapeStartDate+'/0',
+        url: hostName + '/api/gethashcontent/' + shopName + '/' + updated + '/' + deleted+'/'+country+'/'+scrapeStartDate+'/1',
         context: document.body,
         global: false,
         async:false,
@@ -114,22 +112,24 @@ console.log(scrapeStartDate);
     $.ajax({
         context: document.body,
         type: 'GET',
-        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted +'/'+country+'/'+scrapeStartDate+'/0',
+        url: hostName + '/api/getcontent/' + shopName + '/' + updated + '/' + deleted +'/'+country+'/'+scrapeStartDate+'/1',
         success: function (data) {
             $("#loading").hide();
             var jsonArr = [];
-        for(var i =0; i<data.length; i++) {
+            for(var i =0; i<data.length; i++) {
 
-            if(flipitshops.indexOf(String(data[i].shopName)) > -1 && noflipitshops.indexOf(String(data[i].shopName)) != -1) {
-                jsonArr.push({
-                    shopName:data[i].shopName,
-                    website:data[i].website,
-                    productName:data[i].productName,
-                    endDate:data[i].endDate
-                });
+                if(flipitshops.indexOf(String(data[i].shopName)) > -1 && noflipitshops.indexOf(String(data[i].shopName)) != -1) {
+                    jsonArr.push({
+                        shopName:data[i].shopName,
+                        website:data[i].website,
+                        productName:data[i].productName,
+                        terms:data[i].terms,
+                        code:data[i].code,
+                        endDate:data[i].endDate
+                    });
+                }
+
             }
-
-        }
 
 
             hot.loadData(jsonArr);
@@ -162,7 +162,7 @@ console.log(scrapeStartDate);
         if(col == 0) {
             oldShopName = value;
         }
-        if(col == 1 || col == 0 || col ==3 ) {
+        if(col == 1 || col == 0 || col ==3  || col ==4 || col ==5) {
             if(shopNameArray.indexOf(oldShopName) != -1) {
                 td.style.fontWeight = 'normal';
                 td.style.color = 'black';
@@ -176,16 +176,16 @@ console.log(scrapeStartDate);
             switch (shopName) {
                 case 'cupones':
                     orginvalue.replace("      ","").replace("      ","").slice(0,-1).replace("  ","");
-                break;
+                    break;
                 case 'cuponation':
                     orginvalue.replace("-", "").replace("+", "").replace("\"", "");
-                break;
+                    break;
                 case 'cuponesmagicos':
                     orginvalue.trim().replace(/\r?\n|\r/g, " ");
-                break;
+                    break;
                 case 'cupon_es':
                     orginvalue.replace(/\r?\n|\r/g, " ").trim().replace("-","").replace("+","").replace("\"","");
-                break;
+                    break;
 
             }
             if(shopNameArray.indexOf(oldShopName) != -1) {
@@ -212,14 +212,13 @@ console.log(scrapeStartDate);
 
 
     Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
-
-
     hot = new Handsontable(container, {
         startRows: 1,
         startCols: 1,
         rowHeaders: true,
         colHeaders: true,
         minSpareRows: 0,
+
         contextMenu: {
             callback: function (key, options) {
                 ajax(hostName + '/api/delete_code', 'POST', "delete=" + deleteContent + "&oldValue=" + this.getDataAtCell(options.end.row, 2) + "&shopName=" + this.getDataAtCell(options.end.row, 1), function (res) {
@@ -231,12 +230,14 @@ console.log(scrapeStartDate);
             }
         },
 
-        colWidths: [200, 200, 800, 120],
-        colHeaders: ["Competitor", "Shopname", "Description", "Expiredate"],
+        colWidths: [100, 100, 800, 300,100,100],
+        colHeaders: ["Competitor", "Shopname", "Description","Terms","Code","Expiredate"],
         columns: [
             {data: 'website'},
             {data: 'shopName'},
             {data: 'productName'},
+            {data: 'terms'},
+            {data: 'code'},
             {data: 'endDate'}
         ],
 
@@ -271,19 +272,19 @@ console.log(scrapeStartDate);
             }
             var oldValue = encodeURIComponent(change[0][2]);
             var newValue = encodeURIComponent(change[0][3]);
+
             var rowIndex = change[0][0];
             var columnIndex = change[0][1];
             if (oldValue != newValue) {
-                if (columnIndex == "endDate") {
-                    ajax(hostName + '/api/updatecode', 'POST', "newValue=" + newValue + "&shopName=" + shopName + "&oldValue=" + hot.getDataAtCell(rowIndex, 2) + "&dateChange=1", function (res) {
+                if(columnIndex=='terms') {
+                    var getData = hot.getDataAtRow(rowIndex);
+                    ajax(hostName + '/api/updatekortingscode', 'POST', "terms=1&newValue=" + newValue + "&shopName=" + shopName + "&oldValue=" + getData[2], function (res) {
                     });
-                } else {
-                    if (newValue.length > 15 && newValue.length < 150) {
-                        ajax(hostName + '/api/updatecode', 'POST', "newValue=" + newValue + "&shopName=" + shopName + "&oldValue=" + oldValue, function (res) {
-
-                        });
-                    }
+                } else if( columnIndex == 'productName') {
+                    ajax(hostName + '/api/updatekortingscode', 'POST', "terms=0&newValue=" + newValue + "&shopName=" + shopName + "&oldValue=" + oldValue, function (res) {
+                    });
                 }
+
             }
         }
     });

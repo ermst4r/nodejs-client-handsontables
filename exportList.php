@@ -17,9 +17,6 @@
             <div class="row">
                 <!--=== Example Box ===-->
                 <div class="col-md-12">
-
-
-
                     <table class="table table-striped table-bordered table-hover" id="showexport">
                         <thead>
                         <tr>
@@ -34,7 +31,7 @@
                             <tr>
                                 <td > <B> <?php echo date("Y-m-d",strtotime($values->lastUpdated));?> </B> </td>
 
-                                <td><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0/<?php echo $_GET['lang'];?>/<?php echo $values->lastUpdated;?>"> <i class="icon-download"></i> Download</a>  </td>
+                                <td><a href="<?php echo $apiUrl;?>/api/getdata/xls/1/0/<?php echo $_GET['lang'];?>/<?php echo $values->lastUpdated;?>/<?php echo  ( basename($_SERVER['PHP_SELF']) =='codes.php' ? 1 : 0);?>"> <i class="icon-download"></i> Download</a>  </td>
                             </tr>
                         <?php endforeach;?>
 
