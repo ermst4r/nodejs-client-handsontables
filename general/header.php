@@ -304,7 +304,17 @@
                             <li><a href="javascript:spiderWebsite('bargainmoose_ca')"><i class="icon-upload"></i>Bargainmoose CA</a>
                             </li>
 
-                            <?php break;
+                            <?php break;  case 'be': ?>
+                        <li><a href="javascript:spiderWebsite('flipit_be')"><i class="icon-upload"></i>Flipit BE
+                                (master)</a></li>
+                        <li><a href="javascript:spiderWebsite('solden_be')"><i class="icon-upload"></i>Solden.BE</a>
+                        </li>
+                        <li><a href="javascript:spiderWebsite('tagcity_be')"><i class="icon-upload"></i>Tagcity.be</a>
+                        </li>
+                        <li><a href="javascript:spiderWebsite('promo-code')"><i class="icon-upload"></i>Promo-code.be</a>
+                        </li>
+
+                        <?php break;
                     }?>
 
 
@@ -342,6 +352,7 @@
                     <li><a href="index.php?updated=-1&lang=ch"><i class="icon-flag"></i> Switserland </a></li>
                     <li><a href="index.php?updated=-1&lang=us"><i class="icon-flag"></i> United states </a></li>
                     <li><a href="index.php?updated=-1&lang=ca"><i class="icon-flag"></i> Canada </a></li>
+                    <li><a href="index.php?updated=-1&lang=be"><i class="icon-flag"></i> Belgium </a></li>
                 </ul>
             </li>
             <!-- /user login dropdown -->
@@ -416,6 +427,13 @@
                             <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=ca';?>">
                                 <i class="icon-angle-right"></i>
                                 Canada
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=be';?>">
+                                <i class="icon-angle-right"></i>
+                                Belgium
                             </a>
                         </li>
 
