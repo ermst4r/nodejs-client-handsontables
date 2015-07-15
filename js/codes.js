@@ -149,7 +149,7 @@ $(document).ready(function () {
 
 
     var oldShopName ='';
-    var shopNameArray = ['zflipit_es','zflipit_de','zflipit_in','zflipit_sg','zflipit_at','zflipit_ch','zflipit_ca','zflipit_us'];
+    var shopNameArray = ['zflipit_es','zflipit_de','zflipit_in','zflipit_sg','zflipit_at','zflipit_ch','zflipit_ca','zflipit_us','zflipit_be','zflipit_fr'];
     function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
         Handsontable.renderers.TextRenderer.apply(this, arguments);
 

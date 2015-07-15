@@ -164,7 +164,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="index.php<?php echo '?updated=-1&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>Offers</a></li>
-                    <li><a href="codes.php<?php echo '?updated=0&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>Codes</a></li>
+                    <li><a href="codes.php<?php echo '?updated=-1&lang='.$_GET['lang'];?>&scrapeStartDate=<?php echo $_GET['scrapeStartDate'];?>"><i class="icon-angle-right"></i>Codes</a></li>
 
                 </ul>
             </li>
@@ -309,12 +309,22 @@
                                 (master)</a></li>
                         <li><a href="javascript:spiderWebsite('solden_be')"><i class="icon-upload"></i>Solden.BE</a>
                         </li>
-                        <li><a href="javascript:spiderWebsite('tagcity_be')"><i class="icon-upload"></i>Tagcity.be</a>
-                        </li>
+
                         <li><a href="javascript:spiderWebsite('promo-code')"><i class="icon-upload"></i>Promo-code.be</a>
                         </li>
 
-                        <?php break;
+                        <?php break
+                        ;case 'fr': ?>
+                    <li><a href="javascript:spiderWebsite('flipit_fr')"><i class="icon-upload"></i>Flipit FR
+                            (master)</a></li>
+                    <li><a href="javascript:spiderWebsite('igaal_fr')"><i class="icon-upload"></i>Igaal</a>
+                    </li>
+
+                    <li><a href="javascript:spiderWebsite('radins_fr')"><i class="icon-upload"></i>Radins</a>
+                    </li>
+                    <?php break;
+
+
                     }?>
 
 
@@ -353,6 +363,7 @@
                     <li><a href="index.php?updated=-1&lang=us"><i class="icon-flag"></i> United states </a></li>
                     <li><a href="index.php?updated=-1&lang=ca"><i class="icon-flag"></i> Canada </a></li>
                     <li><a href="index.php?updated=-1&lang=be"><i class="icon-flag"></i> Belgium </a></li>
+                    <li><a href="index.php?updated=-1&lang=fr"><i class="icon-flag"></i> France </a></li>
                 </ul>
             </li>
             <!-- /user login dropdown -->
@@ -434,6 +445,13 @@
                             <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=be';?>">
                                 <i class="icon-angle-right"></i>
                                 Belgium
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo $_SERVER['PHP_SELF'].'?updated=-1&lang=fr';?>">
+                                <i class="icon-angle-right"></i>
+                                France
                             </a>
                         </li>
 
