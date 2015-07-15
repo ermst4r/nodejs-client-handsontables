@@ -310,7 +310,7 @@
                         <li><a href="javascript:spiderWebsite('solden_be')"><i class="icon-upload"></i>Solden.BE</a>
                         </li>
 
-                        <li><a href="javascript:spiderWebsite('promo-code')"><i class="icon-upload"></i>Promo-code.be</a>
+                        <li><a href="javascript:spiderWebsite('promo-code_be')"><i class="icon-upload"></i>Promo-code.be</a>
                         </li>
 
                         <?php break
